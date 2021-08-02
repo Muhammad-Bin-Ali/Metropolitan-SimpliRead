@@ -1,0 +1,41 @@
+body{ 
+    margin: 0;
+    padding: 0;
+    background-color: #FCFCFC;
+}
+
+.wrapper {
+    margin-top: 13em;
+    margin-left: 20em;
+    margin-right: 20em;
+}
+
+.title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color:  #393939;
+    font-size: 2.5em;
+}
+
+.line {
+    background-color:  #393939;
+    border-width: 0em;
+    height: 0.1em;
+    width: 100%;
+}
+
+.summarized-para {
+    font-family: "Nunito", sans-serif;
+    font-weight: 500;
+    color:  #393939;
+    font-size: 1.2em;
+    line-height: 1.6em;
+}
+
+.logo {
+    position: absolute;
+    width: auto;
+    height: 6em;
+    right: 7em;
+    top: 3em;
+}
