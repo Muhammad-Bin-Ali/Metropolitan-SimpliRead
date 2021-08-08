@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
+  get_links_from_api()
   $('.loading-animation-wrapper').fadeOut(0);
 
   //sends message to background.js to get tab list
@@ -90,13 +91,21 @@ function add_event_listener_summarize() {
   
   summarize_button.addEventListener('click', () => {
     if (index_of_selected_tab != null) {
-      $('#selected-tab-name').text("");
       $('.loading-animation-wrapper').fadeIn(450);
       chrome.runtime.sendMessage({selected_tab_index: index_of_selected_tab}, (response) => {
         $('.loading-animation-wrapper').fadeOut(450);
       })
-
+      $('#selected-tab-name').text("");
       index_of_selected_tab = null;
+    }
+  })
+}
+
+async function get_links_from_api() {
+  chrome.runtime.sendMessage({get_links: ""}, (response) => {
+    var links = response.saved_links;
+    for (var i = 0; i < links.length; i++) {
+      console.log(links[i])
     }
   })
 }

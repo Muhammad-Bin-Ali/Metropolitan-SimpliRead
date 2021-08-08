@@ -63,3 +63,30 @@ function onTabLoaded(tabId) {
     });
   });
 }
+
+chrome.runtime.onMessage.addListener((request, send, sendResponse) => {
+  if (request.get_links === "") {
+    chrome.identity.getProfileUserInfo((user) => {
+      get_links_from_api(user.email)
+      .then(links => {
+        sendResponse({saved_links: links})
+      });
+    })
+  }
+})
+
+async function get_links_from_api(email) {
+  var api_endpoint = "http://127.0.0.1:5000/summarize-article/" + email
+
+  var returned_text;
+
+  //await is used here to pause the program execution till fetch returns something
+  await fetch(api_endpoint, {
+    method: 'GET',
+    mode: "cors",
+  })
+  .then(response => response.json())
+  .then(data => returned_text = data);
+
+  return returned_text.links;
+}
