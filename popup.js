@@ -1,6 +1,11 @@
 window.addEventListener('DOMContentLoaded', (event) => {
   get_links_from_api()
-  $('.loading-animation-wrapper').fadeOut(0);
+  
+  //hiding elements when extension is opened
+  $('.loading-animation-wrapper').fadeOut(0); 
+  $(".saved-container").hide(); //hides saved article list
+  $(".summarized-article").hide(); //hides the summarized article <div> element
+  $(".main-header").hide(); //hides main header
 
   //sends message to background.js to get tab list
   chrome.runtime.sendMessage({tabs_req: ""}, (response) => {
@@ -93,6 +98,13 @@ function add_event_listener_summarize() {
     if (index_of_selected_tab != null) {
       $('.loading-animation-wrapper').fadeIn(450);
       chrome.runtime.sendMessage({selected_tab_index: index_of_selected_tab}, (response) => {
+        $(".saved-container").hide(); //hides saved article list
+        $(".summarized-article").show(); //shows the summarized article <div> element
+        $(".main-header").show(); //hide main header
+        $("#main-content").show(); //hide Like icon
+        document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
+        document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
+        //fades the loading animation out
         $('.loading-animation-wrapper').fadeOut(450);
       })
       $('#selected-tab-name').text("");
@@ -105,7 +117,42 @@ async function get_links_from_api() {
   chrome.runtime.sendMessage({get_links: ""}, (response) => {
     var links = response.saved_links;
     for (var i = 0; i < links.length; i++) {
-      console.log(links[i])
+      $(".saved-container").append(`
+      <div class='saved-article-entry'>
+        <a href="#" class='article-name'>${links[i][0]}</a>
+        <h2 class='date'>${links[i][1]}</h2>
+        <hr class='post-line'>
+    </div>`)
     }
   })
 }
+
+//If book shelf icon is clicked
+document.querySelector('.book-shelf').addEventListener('click', () => {
+  $(".main-header").hide();
+  $(".summarized-article").hide() //hides the summarized article <div> element
+  $("#main-content").hide(); //hide like icon
+  $(".saved-container").fadeIn(350); //shows saved article list
+  $(".search").fadeIn(350); //fade in search bar
+  document.querySelector('.main-header').innerText = "Saved Links";
+  $(".main-header").fadeIn(350);
+})
+
+//code for search bar
+document.querySelector('.search').addEventListener('keyup', () => {
+  var filter = document.querySelector(".search").value;
+  var links = document.getElementsByClassName('saved-article-entry');
+
+  for (var i = 0; i < links.length; i++) {
+    var title = links[i].querySelector('.article-name').innerText;
+    if (links) {
+      //if the title of the link does NOT include the filter, then hide it
+      if (!(title.toLowerCase()).includes(filter.toLowerCase())) {
+        $(".saved-container").children().eq(i).hide();
+      }
+      else {
+        $(".saved-container").children().eq(i).show();
+      }
+    }
+  }
+})

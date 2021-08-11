@@ -10,7 +10,6 @@ body {
     display: none !important;
 }
 
-
 .container {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -31,6 +30,7 @@ body {
     margin-left: 3.2em;
     margin-top: 4em;
     position: fixed;
+    z-index: 10;
 }
 
 .name {
@@ -76,27 +76,36 @@ body {
 }
 
 .white-box {
+    position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: row;
+    z-index: 5;
+    vertical-align: middle;
 }
 
 .white-container {
-    margin-left: 3.2em;
+    width: 100%;
+    margin-left: 1em;
     margin-top: 4em;
-    margin-right: 3.2em;
+    margin-right: 8em;
+    /* background: blue */
 }
 
-.saved-articles {
+.main-header {
     color: #393939;
     font-size: 1.8em;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
+    margin-left: .5em;
 }
 
 .saved-container {
-    /* background:rgb(194, 194, 194); */
-    width: 100%; 
-    
+    /* background: red; */
+    width: auto;
+    margin-left: 1em; 
+    margin-right: 1em;
 }
 
 .saved-article-entry {
@@ -112,7 +121,7 @@ body {
 }
 
 .saved-article-entry > * {
-    vertical-align:middle;  
+    vertical-align: middle;  
 }
 
 .article-name {
@@ -122,8 +131,7 @@ body {
     font-size: 1.1em;
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
-    max-width: 60%;
-    margin-right: 5.6em;
+    max-width: 50%;
     text-decoration: none;
     margin-top: 1em;
     margin-bottom: 1em;
@@ -141,7 +149,7 @@ body {
     color: #393939;
     font-size: 1em;
     font-family: 'Nunito', sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     color: #B7B7B7;
     padding: .5em 1.5em .5em 1.5em;
     border-radius: 2em;
@@ -166,10 +174,10 @@ ul {
     max-height: 250px;
     overflow: hidden;
     overflow-y: scroll;
-    border-radius: 17px;
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.15);
+    border-radius: 0px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
     margin-top: 1em;
-    animation: Open_div .2s linear;
+    z-index: top;
 }
 
 .hidden {
@@ -193,7 +201,6 @@ li {
     border-bottom: 1px solid #DFDFDF;
     -webkit-user-select: none;
     animation: FadeIn .5s linear;
-    z-index: top;
 }
 
 @keyframes FadeIn { 
@@ -293,4 +300,436 @@ li:active {
     background-color: #FF8253;
 }
 
+.side-bar {
+    position: fixed;
+    background: #fff;
+    height: 100vh;
+    width: 60px; 
+    box-shadow:  0px 0px 15px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    right: 0;
+    z-index: 10;
+    border-radius: 24px 0em 0em 24px;
+}
 
+/* -------------------- css for book icon ---------------------- */
+
+.book-shelf {
+    height: auto;
+    width: 55px;
+    margin-top: 4em;
+}
+  
+@-webkit-keyframes book-bounce {
+0% {
+    transform: translateY(0);
+}
+40% {
+    transform: translateY(-10px);
+}
+80% {
+    transform: translateY(0);
+}
+100% {
+    transform: translateY(0);
+}
+}
+
+@keyframes book-bounce {
+0% {
+    transform: translateY(0);
+}
+40% {
+    transform: translateY(-10px);
+}
+80% {
+    transform: translateY(0);
+}
+100% {
+    transform: translateY(0);
+}
+}
+@-webkit-keyframes shelf-lift {
+0% {
+    transform: translateY(0) rotate(0);
+}
+20% {
+    transform: translateY(-4px) rotate(10deg);
+}
+40% {
+    transform: translateY(-4px) rotate(0);
+}
+40% {
+    transform: translateY(-4px) rotate(-10deg);
+}
+80% {
+    transform: translateY(0);
+}
+100% {
+    transform: translateY(0);
+}
+}
+@keyframes shelf-lift {
+0% {
+    transform: translateY(0) rotate(0);
+}
+20% {
+    transform: translateY(-4px) rotate(10deg);
+}
+40% {
+    transform: translateY(-4px) rotate(0);
+}
+40% {
+    transform: translateY(-4px) rotate(-10deg);
+}
+80% {
+    transform: translateY(0);
+}
+100% {
+    transform: translateY(0);
+}
+}
+.book-shelf:hover {
+cursor: pointer;
+}
+.book-shelf:hover .book-shelf__book {
+-webkit-animation: book-bounce 0.4s ease;
+        animation: book-bounce 0.4s ease;
+-webkit-animation-iteration-count: 1;
+        animation-iteration-count: 1;
+}
+.book-shelf:hover .book-shelf__book--two {
+-webkit-animation-delay: 0.04s;
+        animation-delay: 0.04s;
+}
+.book-shelf:hover .book-shelf__book--three {
+-webkit-animation-delay: 0.08s;
+        animation-delay: 0.08s;
+}
+.book-shelf:hover .book-shelf__shelf {
+-webkit-animation: shelf-lift 0.4s ease;
+        animation: shelf-lift 0.4s ease;
+-webkit-animation-iteration-count: 1;
+        animation-iteration-count: 1;
+transform-origin: 50% 50%;
+}
+
+/* -------------------code for Instagram icon--------------------- */
+.icon-link {  
+    display: inline-flex;
+    font-size: 2em;  
+    text-decoration: none;  
+    color: var(--color-icon);
+    width: 1.7em;
+    height: 1.7em;   
+    transition: .5s linear;
+    position: relative;
+    z-index: 3;
+    margin-bottom: 2em;
+  }
+  
+  .icon-link:hover {
+    color: #fff;
+  }
+  
+  .icon-link i {
+    margin: auto;    
+  }
+  
+  .icon-link::before {  
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 1.7em;
+    height: 1.7em;
+    background: #FF8253;
+    background-image: linear-gradient(210deg, #FF8253, 45%, #532060);
+    border-radius: 50%;
+    z-index: -2;
+    transform: scale(0);
+    transition: 0.3s cubic-bezier(.95, .32, .37, 1.21);
+  }
+    
+  .icon-link:hover::before {  
+    transform: scale(1);
+  }
+  
+ /* -----------------Summarized Article Styling------------------- */
+
+.article {
+    position: relative;
+    color: #393939;
+    font-size: 1.1em;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    line-height: 1.5em;
+    z-index: -1;
+}
+
+.summarized-article {
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 4em;
+}
+
+/* ------------------Styling for Like button--------------------- */
+#main-content {
+    margin-top: 4px;
+    flex-grow: 2;
+    display: none;
+  }
+  
+  #heart-svg {
+    cursor: pointer;
+    overflow: visible;
+    width: 48px;
+  }
+  svg #heart {
+    transform-origin: center;
+    animation: animateHeartOut 0.3s linear forwards;
+  }
+  svg #main-circ {
+    transform-origin: 29.5px 29.5px;
+  }
+  
+  #checkbox {
+    display: none;
+  }
+  
+  #checkbox:checked + label svg #heart {
+    transform: scale(0.2);
+    fill: #E2264D;
+    animation: animateHeart 0.3s linear forwards 0.25s;
+  }
+  #checkbox:checked + label svg #main-circ {
+    transition: all 2s;
+    animation: animateCircle 0.3s linear forwards;
+    opacity: 1;
+  }
+  #checkbox:checked + label svg #grp1 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp1 #oval1 {
+    transform: scale(0) translate(0, -30px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp1 #oval2 {
+    transform: scale(0) translate(10px, -50px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp2 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp2 #oval1 {
+    transform: scale(0) translate(30px, -15px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp2 #oval2 {
+    transform: scale(0) translate(60px, -15px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp3 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp3 #oval1 {
+    transform: scale(0) translate(30px, 0px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp3 #oval2 {
+    transform: scale(0) translate(60px, 10px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp4 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp4 #oval1 {
+    transform: scale(0) translate(30px, 15px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp4 #oval2 {
+    transform: scale(0) translate(40px, 50px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp5 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp5 #oval1 {
+    transform: scale(0) translate(-10px, 20px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp5 #oval2 {
+    transform: scale(0) translate(-60px, 30px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp6 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp6 #oval1 {
+    transform: scale(0) translate(-30px, 0px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp6 #oval2 {
+    transform: scale(0) translate(-60px, -5px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp7 {
+    opacity: 1;
+    transition: 0.1s all 0.3s;
+  }
+  #checkbox:checked + label svg #grp7 #oval1 {
+    transform: scale(0) translate(-30px, -15px);
+    transform-origin: 0 0 0;
+    transition: 0.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp7 #oval2 {
+    transform: scale(0) translate(-55px, -30px);
+    transform-origin: 0 0 0;
+    transition: 1.5s transform 0.3s;
+  }
+  #checkbox:checked + label svg #grp2 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  #checkbox:checked + label svg #grp3 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  #checkbox:checked + label svg #grp4 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  #checkbox:checked + label svg #grp5 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  #checkbox:checked + label svg #grp6 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  #checkbox:checked + label svg #grp7 {
+    opacity: 1;
+    transition: 0.1s opacity 0.3s;
+  }
+  
+  @keyframes animateCircle {
+    40% {
+      transform: scale(10);
+      opacity: 1;
+      fill: #DD4688;
+    }
+    55% {
+      transform: scale(11);
+      opacity: 1;
+      fill: #D46ABF;
+    }
+    65% {
+      transform: scale(12);
+      opacity: 1;
+      fill: #CC8EF5;
+    }
+    75% {
+      transform: scale(13);
+      opacity: 1;
+      fill: transparent;
+      stroke: #CC8EF5;
+      stroke-width: 0.5;
+    }
+    85% {
+      transform: scale(17);
+      opacity: 1;
+      fill: transparent;
+      stroke: #CC8EF5;
+      stroke-width: 0.2;
+    }
+    95% {
+      transform: scale(18);
+      opacity: 1;
+      fill: transparent;
+      stroke: #CC8EF5;
+      stroke-width: 0.1;
+    }
+    100% {
+      transform: scale(19);
+      opacity: 1;
+      fill: transparent;
+      stroke: #CC8EF5;
+      stroke-width: 0;
+    }
+  }
+  @keyframes animateHeart {
+    0% {
+      transform: scale(0.2);
+    }
+    40% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes animateHeartOut {
+    0% {
+      transform: scale(1.4);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* --------------------Styling for Search Bar------------------- */
+.search {
+    display: none;
+    box-sizing: border-box;
+    width: 100%;
+    height: 37px;
+    border: 0;
+    background: #F9F6F6;
+    color: #393939;
+    font-size: 1.1em;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    border-radius: 5em;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    outline: none;
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+    transition: ease-in-out 0.2s;
+}
+
+.search::placeholder {
+    color: #C5C5C5;
+}
+
+.search:focus {
+    background:#D96C56;
+    color: #fff;
+}
+
+.search:focus::placeholder {
+    opacity: 0;
+}
