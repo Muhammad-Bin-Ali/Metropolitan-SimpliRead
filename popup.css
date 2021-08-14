@@ -94,17 +94,29 @@ body {
 }
 
 .main-header {
+    display: none;
     color: #393939;
     font-size: 1.8em;
     font-family: 'Nunito', sans-serif;
     font-weight: 700;
-    margin-left: .5em;
+    margin-left: 15px;
+}
+
+.error-message-saved {
+    display: none;
+    margin-left: 17px;
+    color: #393939;
+    font-size: 1.1em;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    max-width: 75%;
 }
 
 .saved-container {
+    display: none;
     /* background: red; */
     width: auto;
-    margin-left: 1em; 
+    margin-left: 17px; 
     margin-right: 1em;
 }
 
@@ -473,7 +485,8 @@ transform-origin: 50% 50%;
 }
 
 .summarized-article {
-    margin-left: 1em;
+    display: none;
+    margin-left: 17px;
     margin-right: 1em;
     margin-bottom: 4em;
 }

@@ -1,8 +1,11 @@
 //event listener to create account upon install
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.identity.getProfileUserInfo((user) => {
-    addUserToDB(user.email, user.id);
-  })
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.runtime.setUninstallURL('https://docs.google.com/forms/d/e/1FAIpQLSdGV15pBCiVuzOwFxBUnztexhChmSCVt6O-jpKFcMRSR5_58w/viewform?usp=sf_link');
+    chrome.identity.getProfileUserInfo((user) => {
+      addUserToDB(user.email, user.id);
+    })
+  }
 })
 
 async function addUserToDB(email, id) {
@@ -31,31 +34,32 @@ chrome.runtime.onMessage.addListener(
     }
   );
 
+//message listener for when user presses the summarize button
 chrome.runtime.onMessage.addListener(
-  function(request, send, sendResponse) {
+  function(request, sender, sendResponse) {
     //if the message passed is a valid integer and not an empty value
     if (Number.isInteger(request.selected_tab_index)) {
       var index_passed = request.selected_tab_index; 
-      console.log(index_passed)
-      chrome.tabs.query({index: index_passed, currentWindow: true}, (tab) => {
-        
+      var windowId = request.current_window;
+
+      chrome.tabs.query({index: index_passed, windowId: windowId}, (tab) => {
         var link = tab[0].url; //gets url of tab
         var title = tab[0].title //gets title of tab
-        //contact API and get summary
-        get_from_api(link).then(summary => {
-          //create new tab with following template and active: false so chrome doesn't switch to new tab
-          sendResponse({title: title, summary: summary})
+
+        chrome.identity.getProfileUserInfo((user) => {
+          //contact API and get summary
+            get_from_api(link, user.id).then(summary => {
+              //create new tab with following template and active: false so chrome doesn't switch to new tab
+              sendResponse({title: title, summary: summary, url: link})
+            })
         })
       })
     }
   }
 )
 
-async function get_from_api(link) {
-  var id;
-  chrome.identity.getProfileUserInfo((user) => {
-    id = user.id;
-  })
+//function for getting summary from API
+async function get_from_api(link, id) {
   var api_endpoint = "http://127.0.0.1:5000/summarize-article/" + id
 
   let formData = new FormData();
@@ -74,30 +78,130 @@ async function get_from_api(link) {
   return returned_text.summary;
 }
 
-
-chrome.runtime.onMessage.addListener((request, send, sendResponse) => {
+//messsage listener for when user firt opens the API. Gets the saved links from database
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.get_links === "") {
     chrome.identity.getProfileUserInfo((user) => {
       get_links_from_api(user.id)
-      .then(links => {
-        sendResponse({saved_links: links})
+      .then(data => {
+        sendResponse({data: data})
       });
     })
   }
 })
 
+//funtion to get saved links from API
 async function get_links_from_api(id) {
   var api_endpoint = "http://127.0.0.1:5000/summarize-article/" + id
 
-  var returned_text;
-
+  var confirmed;
+  var return_context;
   //await is used here to pause the program execution till fetch returns something
   await fetch(api_endpoint, {
     method: 'GET',
     mode: "cors",
   })
-  .then(response => response.json())
-  .then(data => returned_text = data);
+  .then(response => {
+    if (response.status === 200) {
+      confirmed = true;
+    }
+    else {
+      confirmed = false;
+    }
+    return response.json();
+  })
+  .then(data => {
+    return_context = {links: data.links, status: confirmed};
+  });
 
-  return returned_text.links;
+  return return_context;
 }
+
+//message listener for when user presses the heart icon and saves a link
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.save_link) {
+    var title = request.save_link[0].title;
+    var body = request.save_link[0].body;
+    var url = request.save_link[0].url;
+    
+    chrome.identity.getProfileUserInfo((user) => {
+      save_link(title, body, url, user.id).then(confirmation => {
+        sendResponse({confirmed: confirmation});
+      });
+    })
+  }
+})
+
+//message listener for when user presses the heart icon and deletes a link
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.del_link) {
+    var title = request.del_link[0].title;
+    var body = request.del_link[0].body;
+    var url = request.del_link[0].url;
+    
+    chrome.identity.getProfileUserInfo((user) => {
+      del_link(title, body, url, user.id).then(confirmation => {
+        sendResponse({confirmed: confirmation});
+      });
+    })
+  }
+})
+
+//function that contact API and saves link
+async function save_link(title, body, url, id) {
+  var api_endpoint = "http://127.0.0.1:5000/summarize-article/" + id
+
+  let formData = new FormData();
+  formData.append('save_link', true)
+  formData.append('title', title);
+  formData.append('body', body);
+  formData.append('url', url);
+
+  var confirmed;
+  //await is used here to pause the program execution till fetch returns something
+  await fetch(api_endpoint, {
+    method: 'PUT',
+    mode: "cors",
+    body : formData
+  }).then(response => {
+    if (response.status === 201) {
+      confirmed = true
+    }
+    else {
+      confirmed = false;
+    }
+  })
+  
+  return confirmed;
+}
+
+//function that contact API and deletes link
+async function del_link(title, body, url, id) {
+  var api_endpoint = "http://127.0.0.1:5000/summarize-article/" + id
+
+  let formData = new FormData();
+  formData.append('del_link', true)
+  formData.append('title', title);
+  formData.append('body', body);
+  formData.append('url', url);
+
+  var confirmed;
+  //await is used here to pause the program execution till fetch returns something
+  await fetch(api_endpoint, {
+    method: 'DELETE',
+    mode: "cors",
+    body : formData
+  }).then(response => {
+    if (response.status === 201) {
+      confirmed = true
+    }
+    else {
+      confirmed = false;
+    }
+  })
+  
+  return confirmed;
+}
+
+
+//implement feature that displays a checked heart even if user resummarizes 

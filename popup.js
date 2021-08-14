@@ -1,12 +1,6 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-  get_links_from_api()
-  
-  //hiding elements when extension is opened
-  $('.loading-animation-wrapper').fadeOut(0); 
-  $(".saved-container").hide(); //hides saved article list
-  $(".summarized-article").hide(); //hides the summarized article <div> element
-  $(".main-header").hide(); //hides main header
-
+  get_links_from_api() //retrieving saved links from backend
+  $(".loading-animation-wrapper").fadeOut(0); 
   //sends message to background.js to get tab list
   chrome.runtime.sendMessage({tabs_req: ""}, (response) => {
     var tabs = response.tabs_open;
@@ -97,46 +91,77 @@ function add_event_listener_summarize() {
   summarize_button.addEventListener('click', () => {
     if (index_of_selected_tab != null) {
       $('.loading-animation-wrapper').fadeIn(450);
-      chrome.runtime.sendMessage({selected_tab_index: index_of_selected_tab}, (response) => {
-        $(".saved-container").hide(); //hides saved article list
-        $(".summarized-article").show(); //shows the summarized article <div> element
-        $(".main-header").show(); //hide main header
-        $("#main-content").show(); //hide Like icon
-        document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
-        document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
-        //fades the loading animation out
-        $('.loading-animation-wrapper').fadeOut(450);
+
+      //getting ID of current window
+      chrome.windows.getCurrent({}, (window) => {
+        //sending msg to background.js
+        console.log(index_of_selected_tab)
+        chrome.runtime.sendMessage({selected_tab_index: index_of_selected_tab, current_window: window.id}, (response) => {
+          $(".search").hide(); 
+          $(".saved-container").hide(); 
+          $(".summarized-article").show(); 
+          $(".main-header").show();
+          $('#selected-tab-name').text(""); //emptying selected tab
+          index_of_selected_tab = null; //reseting value 
+          document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
+          document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
+          last_url = response.url;
+          $('.loading-animation-wrapper').fadeOut(450);
+          $("#main-content").fadeIn(850);
+        })
       })
-      $('#selected-tab-name').text("");
-      index_of_selected_tab = null;
     }
   })
 }
 
+//function to get saved links and add them to DOM
 async function get_links_from_api() {
   chrome.runtime.sendMessage({get_links: ""}, (response) => {
-    var links = response.saved_links;
-    for (var i = 0; i < links.length; i++) {
-      $(".saved-container").append(`
-      <div class='saved-article-entry'>
-        <a href="#" class='article-name'>${links[i][0]}</a>
-        <h2 class='date'>${links[i][1]}</h2>
-        <hr class='post-line'>
-    </div>`)
+    if (response.data.status) {
+      addListenerIfRetrieveSuccessful();
+      var links = response.data.links;
+      document.querySelector(".saved-container").innerHTML = "";
+      for (var i = 0; i < links.length; i++) {
+        $(".saved-container").append(`
+        <div class='saved-article-entry'>
+          <a href="#" class='article-name'>${links[i][0]}</a>
+          <h2 class='date'>${links[i][1]}</h2>
+          <hr class='post-line'>
+        </div>`)
+      }
+    }
+    else {
+      addListenerIfRetrieveIsNotSuccessful();
     }
   })
 }
 
-//If book shelf icon is clicked
-document.querySelector('.book-shelf').addEventListener('click', () => {
-  $(".main-header").hide();
-  $(".summarized-article").hide() //hides the summarized article <div> element
-  $("#main-content").hide(); //hide like icon
-  $(".saved-container").fadeIn(350); //shows saved article list
-  $(".search").fadeIn(350); //fade in search bar
-  document.querySelector('.main-header').innerText = "Saved Links";
-  $(".main-header").fadeIn(350);
-})
+//If book shelf icon is clicked and the retrieval of links is successful
+function addListenerIfRetrieveSuccessful() {
+  document.querySelector('.book-shelf').addEventListener('click', () => {
+    $(".main-header").hide();
+    $(".summarized-article").hide() 
+    $("#main-content").hide(); 
+    $(".saved-container").fadeIn(350); 
+    $(".search").fadeIn(350); 
+    document.querySelector('.main-header').innerText = "Saved Links";
+    $(".main-header").fadeIn(350);
+  })
+}
+
+//If book shelf icon is clicked and the retrieval of links is unsuccessful
+function addListenerIfRetrieveIsNotSuccessful () {
+  document.querySelector('.book-shelf').addEventListener('click', () => {
+    $(".main-header").hide();
+    $(".summarized-article").hide() 
+    $("#main-content").hide(); 
+
+    document.querySelector('.main-header').innerText = "Error";
+    $(".main-header").fadeIn(350);
+    $(".error-message-saved").fadeIn(350);
+  })
+}
+
 
 //code for search bar
 document.querySelector('.search').addEventListener('keyup', () => {
@@ -155,4 +180,39 @@ document.querySelector('.search').addEventListener('keyup', () => {
       }
     }
   }
+})
+
+var last_url; //the URl that the user just summarized
+
+document.querySelector("#checkbox").addEventListener("click", () => {
+    var like_btn_status = document.getElementById('checkbox').checked;
+    
+    if (like_btn_status === true) {
+      var title = document.querySelector(".main-header").innerText;
+      var body = document.querySelector(".article").innerText;
+      
+      chrome.runtime.sendMessage({save_link: [{title: title, body: body, url: last_url}]}, (response) => {
+        var result = response.confirmed;
+        if (!result) {
+          $('#checkbox').prop('checked', false); // Unchecks the heart icon
+        }
+        else {
+          get_links_from_api() //reload the saved links if the link was saved successfully
+        }
+      })
+    }
+    else if (like_btn_status === false) {
+      var title = document.querySelector(".main-header").innerText;
+      var body = document.querySelector(".article").innerText;
+      
+      chrome.runtime.sendMessage({del_link: [{title: title, body: body, url: last_url}]}, (response) => {
+        var result = response.confirmed;
+        if (!result) {
+          $('#checkbox').prop('checked', true); // Unchecks the heart icon
+        }
+        else {
+          get_links_from_api() //reload the saved links if the link was saved successfully
+        }
+      })
+    }
 })
