@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-  get_links_from_api() //retrieving saved links from backend
+  get_links_from_api(); //retrieving saved links from backend
   $(".loading-animation-wrapper").fadeOut(0); 
   //sends message to background.js to get tab list
   chrome.runtime.sendMessage({tabs_req: ""}, (response) => {
@@ -105,7 +105,12 @@ function add_event_listener_summarize() {
           index_of_selected_tab = null; //reseting value 
           document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
           document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
-          last_url = response.url;
+
+          
+          //has user already saved this link before?
+          if (response.exists) {
+            $('#checkbox').prop('checked', true)
+          }
           $('.loading-animation-wrapper').fadeOut(450);
           $("#main-content").fadeIn(850);
         })
@@ -116,19 +121,21 @@ function add_event_listener_summarize() {
 
 //function to get saved links and add them to DOM
 async function get_links_from_api() {
-  chrome.runtime.sendMessage({get_links: ""}, (response) => {
+  await chrome.runtime.sendMessage({get_links: ""}, (response) => {
     if (response.data.status) {
       addListenerIfRetrieveSuccessful();
       var links = response.data.links;
       document.querySelector(".saved-container").innerHTML = "";
       for (var i = 0; i < links.length; i++) {
         $(".saved-container").append(`
+        <div class='hover-div'>
         <div class='saved-article-entry'>
-          <a href="#" class='article-name'>${links[i][0]}</a>
+          <h3 class='article-name'>${links[i][0]}</h3>
           <h2 class='date'>${links[i][1]}</h2>
-          <hr class='post-line'>
+        </div>
         </div>`)
       }
+      addListenerForSavedLinks();
     }
     else {
       addListenerIfRetrieveIsNotSuccessful();
@@ -182,7 +189,7 @@ document.querySelector('.search').addEventListener('keyup', () => {
   }
 })
 
-var last_url; //the URl that the user just summarized
+
 
 document.querySelector("#checkbox").addEventListener("click", () => {
     var like_btn_status = document.getElementById('checkbox').checked;
@@ -191,7 +198,7 @@ document.querySelector("#checkbox").addEventListener("click", () => {
       var title = document.querySelector(".main-header").innerText;
       var body = document.querySelector(".article").innerText;
       
-      chrome.runtime.sendMessage({save_link: [{title: title, body: body, url: last_url}]}, (response) => {
+      chrome.runtime.sendMessage({save_link: [{title: title, body: body}]}, (response) => {
         var result = response.confirmed;
         if (!result) {
           $('#checkbox').prop('checked', false); // Unchecks the heart icon
@@ -205,7 +212,7 @@ document.querySelector("#checkbox").addEventListener("click", () => {
       var title = document.querySelector(".main-header").innerText;
       var body = document.querySelector(".article").innerText;
       
-      chrome.runtime.sendMessage({del_link: [{title: title, body: body, url: last_url}]}, (response) => {
+      chrome.runtime.sendMessage({del_link: [{title: title, body: body}]}, (response) => {
         var result = response.confirmed;
         if (!result) {
           $('#checkbox').prop('checked', true); // Unchecks the heart icon
@@ -216,3 +223,37 @@ document.querySelector("#checkbox").addEventListener("click", () => {
       })
     }
 })
+
+document.querySelector('.icon-link').addEventListener('click', () => {
+  chrome.tabs.create({url: "https://www.instagram.com/metropolitan_mag/?hl=en", active: false})
+})
+ 
+//function to add eventlistener to each saved link element
+function addListenerForSavedLinks() {
+  var elems = document.getElementsByClassName('saved-article-entry')
+  Array.from(elems).forEach(elem => {
+    elem.addEventListener('click', () => {
+      var title = elem.querySelector('.article-name').innerText;
+      $('.loading-animation-wrapper').fadeIn(450);
+
+      chrome.runtime.sendMessage({retrieve_saved: title}, (response) => {
+        if (response.confirmed) {
+          var body = response.body;
+          $(".search").hide(); 
+          $(".saved-container").hide(); 
+          $(".summarized-article").show(); 
+          document.querySelector('.article').innerText = body;
+          document.querySelector('.main-header').innerText = title;
+          $("#main-content").show(); 
+          $('#checkbox').prop('checked', true)
+          $('.loading-animation-wrapper').fadeOut(450);
+        }
+        else {
+          document.querySelector('.main-header').innerText = "Error";
+          $(".main-header").fadeIn(350);
+          $(".error-message-saved").fadeIn(350);
+        }
+      })
+    })
+  })
+}
