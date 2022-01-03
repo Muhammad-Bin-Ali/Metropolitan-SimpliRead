@@ -97,22 +97,40 @@ function add_event_listener_summarize() {
         //sending msg to background.js
         console.log(index_of_selected_tab)
         chrome.runtime.sendMessage({selected_tab_index: index_of_selected_tab, current_window: window.id}, (response) => {
-          $(".search").hide(); 
-          $(".saved-container").hide(); 
-          $(".summarized-article").show(); 
-          $(".main-header").show();
-          $('#selected-tab-name').text(""); //emptying selected tab
-          index_of_selected_tab = null; //reseting value 
-          document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
-          document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
+          if (response.confirmed) {
+            $(".search").hide(); 
+            $(".saved-container").hide(); 
+            $(".error-message-saved").hide();
+            $(".error-message-summarize").hide();
+            $(".summarized-article").show(); 
+            $(".main-header").show();
+            $('#selected-tab-name').text(""); //emptying selected tab
+            index_of_selected_tab = null; //reseting value 
+            document.querySelector('.article').innerText = response.summary; //puts summary into <p> element
+            document.querySelector('.main-header').innerText = response.title; //puts tab title into main header
+             //has user already saved this link before?
+            if (response.exists) {
+              $('#checkbox').prop('checked', true)
+            }
+            $('.loading-animation-wrapper').fadeOut(450);
+            $("#main-content").fadeIn(850);
+            }
 
-          
-          //has user already saved this link before?
-          if (response.exists) {
-            $('#checkbox').prop('checked', true)
+          else {
+            $(".search").hide(); 
+            $(".summarized-article").hide(); 
+            $(".saved-container").hide(); 
+            $(".error-message-saved").hide();
+            $(".main-header").show();
+            $('#selected-tab-name').text(""); //emptying selected tab
+            index_of_selected_tab = null; //reseting value 
+
+            document.querySelector('.main-header').innerText = "Error";
+            $(".main-header").fadeIn(350);
+            $(".error-message-summarize").fadeIn(350);
+
+            $('.loading-animation-wrapper').fadeOut(450);
           }
-          $('.loading-animation-wrapper').fadeOut(450);
-          $("#main-content").fadeIn(850);
         })
       })
     }
@@ -145,30 +163,48 @@ async function get_links_from_api() {
 
 //If book shelf icon is clicked and the retrieval of links is successful
 function addListenerIfRetrieveSuccessful() {
-  document.querySelector('.book-shelf').addEventListener('click', () => {
+  document.querySelector('.book-shelf').removeEventListener('click', displayError)
+  document.querySelector('.book-shelf').addEventListener('click', displayLinks)
+}
+
+function displayLinks() {
+  $('.loading-animation-wrapper').fadeIn(150);
+  get_links_from_api().then(() => {
     $(".main-header").hide();
     $(".summarized-article").hide() 
     $("#main-content").hide(); 
+    $(".error-message-summarize").hide();
+    $(".error-message-saved").hide();
     $(".saved-container").fadeIn(350); 
     $(".search").fadeIn(350); 
     document.querySelector('.main-header').innerText = "Saved Links";
+    $('.loading-animation-wrapper').fadeOut(450);
     $(".main-header").fadeIn(350);
-  })
+  }); 
 }
 
 //If book shelf icon is clicked and the retrieval of links is unsuccessful
 function addListenerIfRetrieveIsNotSuccessful () {
-  document.querySelector('.book-shelf').addEventListener('click', () => {
+  document.querySelector('.book-shelf').removeEventListener('click', displayLinks)
+  document.querySelector('.book-shelf').addEventListener('click', displayError)
+}
+
+function displayError() {
+  $('.loading-animation-wrapper').fadeIn(150);
+  get_links_from_api().then(() => {
     $(".main-header").hide();
     $(".summarized-article").hide() 
     $("#main-content").hide(); 
-
+    $(".error-message-summarize").hide();
+    $(".saved-container").hide(); 
+    $(".search").hide(); 
+  
     document.querySelector('.main-header').innerText = "Error";
+    $('.loading-animation-wrapper').fadeOut(450);
     $(".main-header").fadeIn(350);
     $(".error-message-saved").fadeIn(350);
-  })
+  });
 }
-
 
 //code for search bar
 document.querySelector('.search').addEventListener('keyup', () => {
@@ -249,9 +285,12 @@ function addListenerForSavedLinks() {
           $('.loading-animation-wrapper').fadeOut(450);
         }
         else {
+          $(".search").hide(); 
+          $(".saved-container").hide(); 
           document.querySelector('.main-header').innerText = "Error";
           $(".main-header").fadeIn(350);
           $(".error-message-saved").fadeIn(350);
+          $('.loading-animation-wrapper').fadeOut(450);
         }
       })
     })

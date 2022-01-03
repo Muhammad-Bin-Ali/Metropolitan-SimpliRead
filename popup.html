@@ -5,15 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="popup.css">
-    <link rel="stylesheet" href="loading-animation.css">
-    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" href="static/popup.css">
+    <link rel="stylesheet" href="static/loading-animation.css">
+    <link rel="stylesheet" href="static/all.css">
 
     <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');</style>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap');
-      </style>
-    <title>Document</title>
+    <title>Metropolitan SimpliRead</title>
 </head>
 
 <body>
@@ -33,7 +30,10 @@
         </div>
         <div class='orange-box'>
             <div class='orange-container'>
-                <h1 class='name'>Name of <br>extension</h1>
+              <div class='name-wrapper'>
+                <img class='logo' src='static/icon/icon_32.png'>
+                <h1 class='name'>Metropolitan<br>SimpliRead</h1>
+              </div>
                 <h3 class="tab">Tab</h3>
                 <div class='select-tab'>
                     <h1 id='selected-tab-name' class='selected'></h1>
@@ -54,8 +54,12 @@
                 <h1 class='main-header'>Ball</h1>
                 
                 <h2 class="error-message-saved">Unfortunately, as of right now, we are unable to retrieve your saved links.
-                    Ensure you have a stable internet connection, and if the problem persists, contact the developer through the
+                    Ensure that you have a stable internet connection, and if the problem persists, contact the developer through the
                     chrome web store.</h2>
+                
+                <h2 class="error-message-summarize">Unfortunately, as of right now, we are unable to summarize this link.
+                  Ensure that you have a stable internet connection and that the link consists of a valid body of text. If the problem persists, contact the developer through the
+                  chrome web store.</h2>
 
                 <input type='text' class='search' placeholder='Search'>
                 <div class='saved-container'></div>
