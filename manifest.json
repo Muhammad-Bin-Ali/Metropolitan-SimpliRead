@@ -1,16 +1,22 @@
 {
     "manifest_version": 3,
-    "name": "Metropolitan Magazine - Undecided",
-    "description": "",
+    "name": "Metropolitan SimpliRead",
+    "description": "Use the latest machine learning algorithms to summarize articles and make your daily reading simpler.",
     "version": "1.0.0",
     "action": {
         "default_popup": "popup.html"
     },
-    "options_page": "options.html",
+    "icons": {
+        "16": "static/icon/icon_16.png",
+        "32": "static/icon/icon_32.png",
+        "64": "static/icon/icon_64.png",
+        "128": "static/icon/icon_128.png"
+    },
     "permissions": [
-        "activeTab",
         "tabs",
-        "scripting"
+        "scripting",
+        "identity",
+        "identity.email"
     ],
     "host_permissions": [
         "<all_urls>"

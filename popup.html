@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="popup.css">
+
+    <link rel="stylesheet" href="static/popup.css">
+    <link rel="stylesheet" href="static/loading-animation.css">
+    <link rel="stylesheet" href="static/all.css">
+
     <style>@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');</style>
-    <title>Document</title>
+    <title>Metropolitan SimpliRead</title>
 </head>
+
 <body>
     <div class="container">
+          
+        <div class='loading-animation-wrapper'>
+            <div class="wrapper">
+                <div class="box-wrap">
+                    <div class="box one"></div>
+                    <div class="box two"></div>
+                    <div class="box three"></div>
+                    <div class="box four"></div>
+                    <div class="box five"></div>
+                    <div class="box six"></div>
+                </div>
+            </div>
+        </div>
         <div class='orange-box'>
             <div class='orange-container'>
-                <h1 class='name'>Name of <br>extension</h1>
+              <div class='name-wrapper'>
+                <img class='logo' src='static/icon/icon_32.png'>
+                <h1 class='name'>Metropolitan<br>SimpliRead</h1>
+              </div>
                 <h3 class="tab">Tab</h3>
                 <div class='select-tab'>
                     <h1 id='selected-tab-name' class='selected'></h1>
@@ -24,59 +46,105 @@
                 </div>
                 <ul id='drop-down-list' class="hidden">
                 </ul>
-                <button class="btn">Summarize</button>
+                <button id='summarize' class="btn">Summarize</button>
             </div>
         </div>
         <div class='white-box'>
             <div class='white-container'>
-                <h1 class='saved-articles'>Saved Articles</h1>
-                <div class='saved-container'>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and more text and even more text and more and more and more and more and more and more and mor and more and more ande</a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and some more text and some more placeholder text </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and testing and test </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and testing and test </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and testing and test </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and testing and test </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
-                    <div class='saved-article-entry'>
-                        <a href="" class='article-name'>Placeholder Text and testing and test </a>
-                        <h2 class='date'>10.09.2021</h2>
-                        <hr class='post-line'>
-                    </div>
+                <h1 class='main-header'>Ball</h1>
+                
+                <h2 class="error-message-saved">Unfortunately, as of right now, we are unable to retrieve your saved links.
+                    Ensure that you have a stable internet connection, and if the problem persists, contact the developer through the
+                    chrome web store.</h2>
+                
+                <h2 class="error-message-summarize">Unfortunately, as of right now, we are unable to summarize this link.
+                  Ensure that you have a stable internet connection and that the link consists of a valid body of text. If the problem persists, contact the developer through the
+                  chrome web store.</h2>
+
+                <input type='text' class='search' placeholder='Search'>
+                <div class='saved-container'></div>
+                
+                <div class='summarized-article'>
+                    <p class='article'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. The UN scientific paper says Earth is heating up so quickly due to human activity. It says temperatures in about a decade will blow past a level of warming that world leaders have sought to prevent. Federal Environment Minister Jonathan Wilkinson acknowledged that parts of Western and Northern Canada are warming at three times the global average. The Liberal government has taken "aggressive climate action" through carbon pricing and a pledge to reduce greenhouse gas emissions by 40 to 45 per cent below 2005 levels by 2030, he said in a statement. The Petroleum Services Association of Canada sought to dampen any echoes of a death knell. "At the end of the day we cannot go to renewables overnight, and the world still needs fossil fuels," Sign up for our weekly email newsletter delving into climate science and life on a changing planet. Listen and subscribe to get a daily fix on the latest political news and issues. A check-in on the public mood of Canadians with hosts Michael Stittle and Nik Nanos. All rights reserved. Use of this Website assumes acceptance of Terms & Conditions and Privacy Policy 2021. Back to the page you came from. The Canadian Press is pleased to announce the launch of a new website, The Canadian National Park, in partnership with the Canadian National Parks Service. The National Park Service will be open</p>
                 </div>
             </div>
+
+            <div class='side-bar'>
+                <!-- code for book icon -->
+                <svg class="book-shelf" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 84 94" height="94" width="84">
+                    <path fill="none" d="M37.612 92.805L4.487 73.71c-2.75-1.587-4.45-4.52-4.45-7.687L.008 27.877c-.003-3.154 1.676-6.063 4.405-7.634L37.558 1.167c2.73-1.57 6.096-1.566 8.835.013l33.124 19.096c2.75 1.586 4.45 4.518 4.45 7.686l.028 38.146c.002 3.154-1.677 6.063-4.406 7.634L46.445 92.818c-2.73 1.57-6.096 1.566-8.834-.013z"/>
+                    <g class="book-shelf__book book-shelf__book--one" fill-rule="evenodd">
+                      <path fill="#5199fc" d="M31 29h4c1.105 0 2 .895 2 2v29c0 1.105-.895 2-2 2h-4c-1.105 0-2-.895-2-2V31c0-1.105.895-2 2-2z"/>
+                      <path fill="#afd7fb" d="M34 36h-2c-.552 0-1-.448-1-1s.448-1 1-1h2c.552 0 1 .448 1 1s-.448 1-1 1zm-2 1h2c.552 0 1 .448 1 1s-.448 1-1 1h-2c-.552 0-1-.448-1-1s.448-1 1-1z"/>
+                    </g>
+                    <g class="book-shelf__book book-shelf__book--two" fill-rule="evenodd">
+                      <path fill="#ff9868" d="M39 34h6c1.105 0 2 .895 2 2v24c0 1.105-.895 2-2 2h-6c-1.105 0-2-.895-2-2V36c0-1.105.895-2 2-2z"/>
+                      <path fill="#d06061" d="M42 38c1.105 0 2 .895 2 2s-.895 2-2 2-2-.895-2-2 .895-2 2-2z"/>
+                    </g>
+                    <g class="book-shelf__book book-shelf__book--three" fill-rule="evenodd">
+                      <path fill="#ff5068" d="M49 32h2c1.105 0 2 .86 2 1.92v25.906c0 1.06-.895 1.92-2 1.92h-2c-1.105 0-2-.86-2-1.92V33.92c0-1.06.895-1.92 2-1.92z"/>
+                      <path fill="#d93368" d="M50 35c.552 0 1 .448 1 1v2c0 .552-.448 1-1 1s-1-.448-1-1v-2c0-.552.448-1 1-1z"/>
+                    </g>
+                    <g fill-rule="evenodd">
+                      <path class="book-shelf__shelf" fill="#ae8280" d="M21 60h40c1.105 0 2 .895 2 2s-.895 2-2 2H21c-1.105 0-2-.895-2-2s.895-2 2-2z"/>
+                      <path fill="#855f6d" d="M51.5 67c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5zm-21 0c-.828 0-1.5-.672-1.5-1.5V64h3v1.5c0 .828-.672 1.5-1.5 1.5z"/>
+                    </g>
+                  </svg>
+                  <!-- code for like icon -->
+                  <div id="main-content">
+                    <div>
+                      <input type="checkbox" id="checkbox"/>
+                      <label for="checkbox">
+                        <svg id="heart-svg" viewBox="467 392 58 57" xmlns="http://www.w3.org/2000/svg">
+                          <g id="Group" fill="none" fill-rule="evenodd" transform="translate(467 392)">
+                            <path d="M29.144 20.773c-.063-.13-4.227-8.67-11.44-2.59C7.63 28.795 28.94 43.256 29.143 43.394c.204-.138 21.513-14.6 11.44-25.213-7.214-6.08-11.377 2.46-11.44 2.59z" id="heart" fill="#AAB8C2"/>
+                            <circle id="main-circ" fill="#E2264D" opacity="0" cx="29.5" cy="29.5" r="1.5"/>
+                  
+                            <g id="grp7" opacity="0" transform="translate(7 6)">
+                              <circle id="oval1" fill="#9CD8C3" cx="2" cy="6" r="2"/>
+                              <circle id="oval2" fill="#8CE8C3" cx="5" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp6" opacity="0" transform="translate(0 28)">
+                              <circle id="oval1" fill="#CC8EF5" cx="2" cy="7" r="2"/>
+                              <circle id="oval2" fill="#91D2FA" cx="3" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp3" opacity="0" transform="translate(52 28)">
+                              <circle id="oval2" fill="#9CD8C3" cx="2" cy="7" r="2"/>
+                              <circle id="oval1" fill="#8CE8C3" cx="4" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp2" opacity="0" transform="translate(44 6)">
+                              <circle id="oval2" fill="#CC8EF5" cx="5" cy="6" r="2"/>
+                              <circle id="oval1" fill="#CC8EF5" cx="2" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp5" opacity="0" transform="translate(14 50)">
+                              <circle id="oval1" fill="#91D2FA" cx="6" cy="5" r="2"/>
+                              <circle id="oval2" fill="#91D2FA" cx="2" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp4" opacity="0" transform="translate(35 50)">
+                              <circle id="oval1" fill="#F48EA7" cx="6" cy="5" r="2"/>
+                              <circle id="oval2" fill="#F48EA7" cx="2" cy="2" r="2"/>
+                            </g>
+                  
+                            <g id="grp1" opacity="0" transform="translate(24)">
+                              <circle id="oval1" fill="#9FC7FA" cx="2.5" cy="3" r="2"/>
+                              <circle id="oval2" fill="#9FC7FA" cx="7.5" cy="2" r="2"/>
+                            </g>
+                          </g>
+                        </svg>
+                      </label>
+                    </div>
+                  </div>
+                  <a class="icon-link"><i class="fab fa-instagram"></i></a>
+            </div>
         </div>
-    
     </div>
     <script src='JQuery/jquery-3.6.0.min.js'></script>
     <script src='popup.js'></script>
+
 </body>
 </html>
